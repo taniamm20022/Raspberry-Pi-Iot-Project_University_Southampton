@@ -1,0 +1,53 @@
+﻿@model LupenM.WebSite.Models.UnitsListingModel
+@{
+  ViewBag.Title = "Home Page";
+}
+
+<h1 class="page-header">Units</h1>
+
+<div class="panel-body">
+    @if (Model.messageModel != null)
+    {
+    @Html.Partial("SucessMessageView", Model.messageModel)
+    }
+
+    @using (Html.BeginForm("Index", "Units", FormMethod.Post, new { @id = "fSearch" }))
+    {
+    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+        <thead>
+            <tr class="bg-primary">
+                <th>Unit</th>
+                <th class="w150 text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+            <tr class="odd gradeA">
+                <td>@Html.ActionLink(item.Name, "UpdateUnit", new { id = item.Id })</td>
+                <td class="text-center">
+                    <a class="txtdNone" href="@Url.Action("UpdateUnit", new { id = item.Id })" aria-label="Left Align">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true" title="Edit"></span>
+                    </a>
+                    <a href="@Url.Action("DeleteUnit", new { id = item.Id })" onclick = "return confirm('Are you sure you wish to delete this entry?');"  id="ctl00_Zone_MainContent_drItems_ctl01_btnDeleteListItem">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true" title="Delete"></span>
+                    </a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+    <p>
+        @Html.Partial("_PagerPartialView", new LupenM.WebSite.Models.PagerModel(Model.CurrentPage, Model.PageSize, Model.TotalRecords, Model.ItemsCount, Model.PageOrder))
+
+        @Html.HiddenFor(m => m.CurrentPage, new { id = "CurrentPage" })
+        @Html.HiddenFor(m => m.TotalPages)
+        @Html.HiddenFor(m => m.PageSize)
+    </p>
+    }
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/PagerScript.js"></script>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>

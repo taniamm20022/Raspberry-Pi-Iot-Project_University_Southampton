@@ -1,0 +1,191 @@
+﻿@using LupenM.WebSite.Helpers
+
+@model  LupenM.WebSite.Models.IndicationsModel
+
+<h1 class="page-header">Signals</h1>
+
+<div class="panel-body">
+    @using (Html.BeginForm("Indications", "Reports", FormMethod.Post, new { @id = "fSearch" }))
+    {
+    @*filters*@
+    <div class="row">
+        <div class="col-sm-3">
+            <label>Date from</label>
+            <div class="input-group date" data-provide="datepicker">
+                @Html.TextBoxFor(x => x.DateFrom, new { @class = "datepicker form-control", @id = "txtDateFrom", placeholder = "-- Select Date --" })
+                <div class="input-group-addon">
+                    <span class="fa fa-calendar h"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <label>Date to</label>
+            <div class="input-group date" data-provide="datepicker">
+                @Html.TextBoxFor(x => x.DateTo, new { @class = "datepicker form-control", @id = "txtDateTo", placeholder = "-- Select Date --" })
+                <div class="input-group-addon">
+                    <span class="fa fa-calendar"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label>Device</label>
+                @Html.DropDownListFor(x => x.SelectedDeviceId, new SelectList(Model.ListDevices, "DeviceID", "Name"), "-- Select Device --",
+       new { @class = "form-control", @id = "ddlDevice" })
+            </div>
+        </div>
+
+        <div class="col-sm-3 pt25">
+            <button type="button" id="btnShow" class="btn btn-info pull-right">Show</button>
+            <button type="button" id="btnClear" class="btn btn-info pull-right mr5">Clear</button>
+        </div>
+    </div>
+    @*end filters*@
+
+    <div class="form-group text-danger hidden" id="txtError">
+        <span>"Date to" should be greater than "Date from".</span>
+    </div>
+
+        if (Model.Indications.Count > 0)
+        {
+        <table id="tblIndications" class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr class="bg-primary">
+                    <th>Date</th>
+                    <th>Device name</th>
+                    <th>IP</th>
+                    <th>Sensor name</th>
+                    <th>Value</th>
+                    <th>Unit</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Indications)
+                {
+                <tr class="odd">
+                    <td>@StringUtils.FormatDate(@item.Date)</td>
+                    <td>@item.DeviceName</td>
+                    <td>@item.IP</td>
+                    <td>@item.SensorName</td>
+                    <td class="text-right">@item.Value</td>
+                    <td>@item.UnitName</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+
+        <p>
+            @Html.Partial("_PagerPartialView", new LupenM.WebSite.Models.PagerModel(Model.CurrentPage, Model.PageSize, Model.TotalRecords, Model.ItemsCount, Model.PageOrder))
+
+            @Html.HiddenFor(m => m.CurrentPage, new { id = "CurrentPage" })
+            @Html.HiddenFor(m => m.TotalPages, new { id = "TotalPages" })
+            @Html.HiddenFor(m => m.PageSize)
+        </p>
+
+        <div class="pull-right">
+            <a href="#" id="exportPdf" class="btn btn-primary">Export to pdf</a>
+        </div>
+
+        <div class="pull-right">
+            <a href="#" id="exportHtml" class="btn btn-primary mr5">Export to html</a>
+        </div>
+
+        <div class="pull-right">
+            <a href="#" id="exportExcel" class="btn btn-primary mr5">Export to excel</a>
+        </div>
+
+        <div class="pull-right">
+            <a href="#" id="exportCsv" class="btn btn-primary mr5">Export to csv</a>
+        </div>
+        }
+        else
+        {
+        <table id="tblIndications" class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr class="bg-primary">
+                    <th>Date</th>
+                    <th>Device name</th>
+                    <th>IP</th>
+                    <th>Sensor name</th>
+                    <th>Value</th>
+                    <th>Unit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="odd">
+                    <td colspan="5" class="text-center">No results found.</td>
+                </tr>
+            </tbody>
+        </table>
+        }
+    }
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/PagerScript.js"></script>
+<script src="~/Scripts/js/bootstrap-datepicker.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.datepicker').datepicker({
+            format: 'mm/dd/yyyy',
+            autoclose: true
+        });
+
+        $('#btnClear').click(function () {
+            $('.datepicker').val('').datepicker('update');
+            $('#ddlDevice').val('');
+
+            $('#fSearch').submit();
+        });
+
+        $('#btnShow').click(function () {
+            var dateFrom = $("#txtDateFrom").val();
+            var dateTo = $("#txtDateTo").val();
+
+            if ($("#txtDateFrom").val() && $("#txtDateTo").val()) {
+                if ((Date.parse(dateFrom) > Date.parse(dateTo))) {
+                    $('#txtError').removeClass('hidden');
+
+                    //setTimeout(function () {
+                    //    $('#txtError').addClass('hidden');
+                    //}, 3000);
+
+                    //alert("'Date to' should be greater than 'Date from'");
+                    return;
+                }
+            }
+
+            $('#fSearch').submit();
+        });
+
+        $('#exportCsv').click(function (e) {
+            e.preventDefault();
+            url = '@Url.Action("ExportCsvIndications")' + '/?SelectedDeviceID=' + $('#ddlDevice').val()
+                + '&DateFrom=' + $('#txtDateFrom').val() + '&DateTo=' + $('#txtDateTo').val();
+            location.href = url;
+        });
+
+        $('#exportExcel').click(function (e) {
+            e.preventDefault();
+            url = '@Url.Action("ExportExcelIndications")' + '/?SelectedDeviceID=' + $('#ddlDevice').val()
+                + '&DateFrom=' + $('#txtDateFrom').val() + '&DateTo=' + $('#txtDateTo').val();
+            location.href = url;
+        });
+
+        $('#exportHtml').click(function (e) {
+            e.preventDefault();
+            url = '@Url.Action("ExportHtmlIndications")' + '/?SelectedDeviceID=' + $('#ddlDevice').val()
+                + '&DateFrom=' + $('#txtDateFrom').val() + '&DateTo=' + $('#txtDateTo').val();
+            location.href = url;
+        });
+
+        $('#exportPdf').click(function (e) {
+            e.preventDefault();
+            url = '@Url.Action("ExportPdfIndications")' + '/?SelectedDeviceID=' + $('#ddlDevice').val()
+                + '&DateFrom=' + $('#txtDateFrom').val() + '&DateTo=' + $('#txtDateTo').val();
+            location.href = url;
+        });
+    });
+</script>

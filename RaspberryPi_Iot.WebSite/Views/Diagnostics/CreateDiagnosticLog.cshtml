@@ -1,0 +1,79 @@
+﻿@model LupenM.WebSite.Models.CreateDiagnosticLogModel
+
+<h1 class="page-header">@ViewBag.Title</h1>
+<div class="panel-body">
+    <div class="row">
+        <div class="col-lg-6">
+            @using (Ajax.BeginForm(new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessAjax", OnBegin = "LoadingFunc" }))
+            {
+            @Html.HiddenFor(x => x.SensorDiagnosticId, new { id = "txtSensorDiagnosticID" })
+            @Html.HiddenFor(x => x.SensorId, new { id = "txtSensorID" })
+              
+            <div class="form-group">
+                <label>Sensor name:</label>
+                @Html.DisplayFor(x => x.Name, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <label>Topic:</label>
+                @Html.DisplayFor(x => x.Topic, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <label>Indication interval (hh:mm:ss)</label>
+                @Html.TextBoxFor(x => x.IndicationInterval, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IndicationInterval, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label>Expected Value</label>
+                @Html.TextBoxFor(x => x.ExpectedValue, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ExpectedValue, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="pull-right">
+                <button id="btnStartTest" type="submit" class="btn btn-success">Start test</button>
+            </div>
+            }
+        </div>
+    </div>
+    <br />
+    <div id="divIndications"></div>
+
+    <div class="overlay">
+        <img src="~/Images/loader.gif" />
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Action("DiagnosticLogsListPartial")' + '?SensorId=' + $("#txtSensorID").val() + '&SensorDiagnosticId=' + $("#txtSensorDiagnosticID").val(),
+            type: 'GET',
+            success: function (data) {
+                $('.overlay').hide();
+                $("#divIndications").html(data);
+            },
+            beforeSend: function () {
+                LoadingFunc();
+            }
+        });
+    });
+
+    function LoadingFunc() {
+        $(".overlay").show();
+    }
+
+    function SuccessAjax(response) {
+        $('.overlay').hide();
+
+        if (response.result == 'Redirect') {
+            window.location = response.url;
+        }
+        else {
+            alert("");
+        }
+    }
+</script>

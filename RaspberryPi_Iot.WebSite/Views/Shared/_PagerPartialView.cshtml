@@ -1,0 +1,77 @@
+﻿@model LupenM.WebSite.Models.PagerModel
+
+@if (Model.TotalPagesReal > 0)
+{
+<div class="row">
+    <div class="col-sm-5">
+        @{
+          int fromRecord = Model._pageSize * (Model.CurrentPage - 1) + 1;
+          int toRecord = Model._pageSize * (Model.CurrentPage - 1) + Model.RecordsCountCurrentPage;
+        }
+
+        <div class="dataTables_info" id="tblsensors_info" style="padding-top: 8px; white-space: nowrap;clear: both; float: left;">
+            Showing @fromRecord to @toRecord of @Model.TotalRecords entries
+        </div>
+    </div>
+    <div class="col-sm-7">
+        <div class="dataTables_paginate paging_simple_numbers" style="white-space: nowrap; text-align: right" id="tblsensors_paginate">
+            <ul class="pagination">
+
+                @if (Model.CurrentPage > 1)
+                {
+                    <li class="paginate_button previous" id="bFirstPage">
+                        <a href="#" aria-controls="tblsensors" data-dt-idx="0" tabindex="0">First</a>
+                    </li>
+                    <li class="paginate_button previous" id="bPrevPage">
+                        <a href="#" aria-controls="tblsensors" data-dt-idx="0" tabindex="0">Previous</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="paginate_button previous disabled" id="bFirstPage">
+                        <a href="#" aria-controls="tblsensors" data-dt-idx="0" tabindex="0">First</a>
+                    </li>
+                    <li class="paginate_button previous disabled" id="tblsensors_previous ">
+                        <a href="#" aria-controls="tblsensors" data-dt-idx="0" tabindex="0">Previous</a>
+                    </li>
+                }
+
+                @for (int i = Model.StartPage; i <= Model.EndPage; i++)
+                {
+                    if (i != Model.CurrentPage)
+                    {
+                    <li class="paginate_button pagenumber">
+                        <a href="#" aria-controls="tblsensors">@i</a>
+                    </li>
+                    }
+                    else
+                    {
+                    <li class="paginate_button active">
+                        <a href="#" aria-controls="tblsensors">@i</a>
+                    </li>
+                    }
+                }
+
+                @if (Model.TotalPages > Model.CurrentPage)
+                {
+                    <li class="paginate_button next" id="bNextPage">
+                        <a href="#" aria-controls="tblsensors">Next</a>
+                    </li>
+                    <li class="paginate_button previous" id="bLastPage">
+                        <a href="#" aria-controls="tblsensors" data-dt-idx="0" tabindex="0">Last</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="paginate_button next disabled" id="tblsensors_next">
+                        <a href="#" aria-controls="tblsensors">Next</a>
+                    </li>
+                    <li class="paginate_button previous disabled" id="bLastPage">
+                        <a href="#" aria-controls="tblsensors" data-dt-idx="0" tabindex="0">Last</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+}

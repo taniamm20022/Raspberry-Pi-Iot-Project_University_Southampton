@@ -1,0 +1,32 @@
+﻿.pt25 {
+    padding-top: 25px;
+}
+
+.w100 {
+    width: 100%;
+}
+
+.w150 {
+    width: 150px;
+}
+
+.w260 {
+    width: 260px;
+}
+
+.mr5 {
+    margin-right: 5px;
+}
+
+.txtdNone:hover {
+    text-decoration: none;
+}
+
+.list-unstyled ul{
+    padding-left: 0;
+  list-style: none;
+}
+
+.vAlignmentMiddle {
+    vertical-align: middle !important;
+}

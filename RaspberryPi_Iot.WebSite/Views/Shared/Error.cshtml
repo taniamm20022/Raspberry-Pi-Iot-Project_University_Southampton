@@ -1,0 +1,8 @@
+﻿@{
+  Layout = Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+}
+
+<div class="form-group text-center">
+    <img src='@(ViewBag.Type=="404"?"Images/error404.png":"Images/error500.png")' />
+    <h1>@ViewBag.Title</h1>
+</div>

@@ -1,0 +1,43 @@
+﻿@model LupenM.WebSite.Models.Users.RegisterViewModel
+
+<h1 class="page-header">User Profile</h1>
+
+<div class="panel-body">
+    @if (Model.messageModel != null)
+    {
+    @Html.Partial("SucessMessageView", Model.messageModel)
+    }
+
+    <div class="row">
+        <div class="col-lg-6">
+            @using (Html.BeginForm("UserProfile", "Acounts", FormMethod.Post, new { @id = "fSearch" }))
+            {
+            <div class="form-group">
+                <label>Name</label>
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label>E-mail</label>
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control", disabled = "disabled" })
+            </div>
+
+            <div class="form-group">
+                <label>Telephone</label>
+                @Html.TextBoxFor(model => model.Telephone, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <label>Address</label>
+                @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+            </div>
+
+            <div class="pull-right">
+                <a href="~/" class="btn btn-info">Cancel</a>
+                <button type="submit" class="btn btn-success">Save</button>
+            </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,58 @@
+﻿@model LupenM.WebSite.Models.SensorListingModel
+
+<h1 class="page-header">Sensors</h1>
+
+<div class="panel-body">
+    @if (Model.messageModel != null)
+    {
+        @Html.Partial("SucessMessageView", Model.messageModel)
+    }
+
+    @using (Html.BeginForm("Index", "Sensors", FormMethod.Post, new { @id = "fSearch" }))
+    {
+    <table class="table table-striped table-bordered table-hover" id="tblsensors">
+        <thead>
+            <tr class="bg-primary">
+                <th>Sensor name</th>
+                <th>Device name</th>
+                <th>Unit</th>
+                <th>Location</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+            <tr class="odd gradeX">
+                <td>@Html.ActionLink(item.Name, "UpdateSensor", new { id = item.SensorId })</td>
+                <td>@item.DeviceName</td>
+                <td>@item.UnitName</td>
+                <td>@item.Location</td>
+                <td class="text-center">
+                    <a class="txtdNone" href="@Url.Action("DiagnosticsList", "Diagnostics", new { SensorID=item.SensorId})" aria-label="Left Align">
+                        <span class="glyphicon glyphicon-wrench" aria-hidden="true" title="Sensor Diagnostic"></span>
+                    </a>
+                    <a class="txtdNone" href="@Url.Action("UpdateSensor", new { id=item.SensorId})" aria-label="Left Align">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true" title="Edit"></span>
+                    </a>
+                    <a href="@Url.Action("DeleteSensor", new { id = item.SensorId })" onclick = "return confirm('Are you sure you wish to delete this entry?');" id="ctl00_Zone_MainContent_drItems_ctl01_btnDeleteListItem">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true" title="Delete"></span>
+                    </a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+    <p>
+        @Html.Partial("_PagerPartialView", new LupenM.WebSite.Models.PagerModel(Model.CurrentPage, Model.PageSize, Model.TotalRecords, Model.ItemsCount, Model.PageOrder))
+
+        @Html.HiddenFor(m => m.CurrentPage, new { id = "CurrentPage" })
+        @Html.HiddenFor(m => m.TotalPages, new { id = "TotalPages" })
+        @Html.HiddenFor(m => m.PageSize)
+    </p>
+    }
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/PagerScript.js"></script>

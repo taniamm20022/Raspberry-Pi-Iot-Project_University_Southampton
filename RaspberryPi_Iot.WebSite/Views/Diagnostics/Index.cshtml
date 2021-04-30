@@ -1,0 +1,95 @@
+﻿@using LupenM.WebSite.Helpers
+
+@model LupenM.WebSite.Models.DiagnosticListingPageModel
+
+<h1 class="page-header">Sensors Status</h1>
+
+@using (Html.BeginForm("Index", "Diagnostics", FormMethod.Post, new { @id = "fSearch" }))
+{
+<div class="panel-body">
+
+    @if (Model.Items.Count > 0)
+    {
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr class="bg-primary">
+                <th>Sensor Name</th>
+                <th>Last Indication Date</th>
+                <th>Last Indication Value</th>
+                <th>Unit</th>
+                <th>Status</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+            <tr class="odd gradeX">
+                <td>@item.SensorName</td>
+                @if (item.Date.HasValue)
+                {
+                <td>@StringUtils.FormatDate(@item.Date)</td>
+                }
+                else
+                {
+                <td>-</td>
+                }
+                <td class="text-right">@item.LastValue</td>
+                <td>@item.UnitName</td>
+                <td class="text-center">
+                    @if (@item.Status)
+                    {
+                    <a href="#">
+                        <i class="fa fa-check" aria-hidden="true" title="Active"></i>
+                    </a>
+                    }
+                    else
+                    {
+                    <a href="#">
+                        <i class="fa fa-ban" aria-hidden="true" title="Inactive"></i>
+                    </a>
+                    }
+                </td>
+                <td class="text-center">
+                    <a class="txtdNone" href="@Url.Action("DiagnosticsList", "Diagnostics", new { SensorID=item.SensorId})" aria-label="Left Align">
+                        <span class="glyphicon glyphicon-wrench" aria-hidden="true" title="Sensor Diagnostic"></span>
+                    </a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+    <p>
+        @Html.Partial("_PagerPartialView", new LupenM.WebSite.Models.PagerModel(Model.CurrentPage, Model.PageSize, Model.TotalRecords, Model.ItemsCount, Model.PageOrder))
+
+        @Html.HiddenFor(m => m.CurrentPage, new { id = "CurrentPage" })
+        @Html.HiddenFor(m => m.TotalPages)
+        @Html.HiddenFor(m => m.PageSize)
+    </p>
+    }
+    else
+    {
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr class="bg-primary">
+                <th>Sensor Name</th>
+                <th>Last Indication Date</th>
+                <th>Last Indication Value</th>
+                <th>Unit</th>
+                <th>Status</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="odd">
+                <td colspan="6" class="text-center">No results found.</td>
+            </tr>
+        </tbody>
+    </table>
+    }
+</div>
+}
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/PagerScript.js"></script>

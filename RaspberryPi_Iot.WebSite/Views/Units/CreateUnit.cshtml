@@ -1,0 +1,25 @@
+﻿@model LupenM.WebSite.Models.CreateUnitModel
+
+<h1 class="page-header">@ViewBag.Title</h1>
+
+<div class="panel-body">
+    <div class="row">
+        <div class="col-lg-6">
+            @using (Html.BeginForm())
+            {
+                @Html.HiddenFor(x => x.Id)
+
+                <div class="form-group">
+                    <label>Unit</label>
+                    @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="pull-right">
+                    <a href="~/Units" class="btn btn-info">Cancel</a>
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

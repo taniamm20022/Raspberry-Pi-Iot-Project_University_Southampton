@@ -1,0 +1,90 @@
+﻿@using LupenM.WebSite.Helpers
+
+@{
+  Layout = null;
+}
+
+@model LupenM.WebSite.Models.DiagnosticLogListingPageModel
+
+@using (Ajax.BeginForm("DiagnosticLogsListPartial", null, new AjaxOptions { UpdateTargetId = "divIndications", InsertionMode = InsertionMode.Replace }, new { @id = "fSearch" }))
+{
+@Html.HiddenFor(x => x.SensorId)
+@Html.HiddenFor(x => x.SensorDiagnosticId)
+
+    if (Model.Items.Count > 0)
+    {
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr class="bg-primary">
+                <th>Diagnostic Date</th>
+                <th>Indication Date</th>
+                <th class="w150">Value</th>
+                <th class="w150">Unit</th>
+                <th class="w150">Expected Value</th>
+                <th class="w150 text-center">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+            <tr class="odd gradeX">
+                <td>@StringUtils.FormatDate(@item.Date)</td>
+                <td>@StringUtils.FormatDate(@item.IndicationDate)</td>
+
+                <td class="text-right">@item.Value</td>
+                <td>@Model.UnitName</td>
+                <td class="text-right">@item.ExpectedValue</td>
+                <td class="text-center">
+                    @if (item.Status)
+                    {
+                    <a href="#">
+                        <i class="fa fa-check" aria-hidden="true" title="Active"></i>
+                    </a>
+                    }
+                    else
+                    {
+                    <a href="#">
+                        <i class="fa fa-ban" aria-hidden="true" title="Inactive"></i>
+                    </a>
+                    }
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+    <p>
+        @if (Model.TotalRecords > 0)
+        {
+        @Html.Partial("_PagerPartialView", new LupenM.WebSite.Models.PagerModel(Model.CurrentPage, Model.PageSize, Model.TotalRecords, Model.ItemsCount, Model.PageOrder))
+
+        @Html.HiddenFor(m => m.CurrentPage, new { id = "CurrentPage" })
+        @Html.HiddenFor(m => m.TotalPages)
+        @Html.HiddenFor(m => m.PageSize)
+        }
+    </p>
+    }
+    else
+    {
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr class="bg-primary">
+                <th>Date</th>
+                <th class="w150">Value</th>
+                <th class="w150">Unit</th>
+                <th class="w150">Expected Value</th>
+                <th class="w150 text-center">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="odd">
+                <td colspan="6" class="text-center">No results found.</td>
+            </tr>
+        </tbody>
+    </table>
+    }
+}
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<script src="~/Scripts/PagerScript.js"></script>

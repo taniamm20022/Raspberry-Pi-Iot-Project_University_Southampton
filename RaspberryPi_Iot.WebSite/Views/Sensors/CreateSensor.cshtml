@@ -1,0 +1,66 @@
+﻿@model LupenM.WebSite.Models.CreateSensorModel
+
+<h1 class="page-header">@ViewBag.Title</h1>
+
+<div class="panel-body">
+    <div class="row">
+        <div class="col-lg-6">
+            @using (Html.BeginForm())
+            {
+            @Html.HiddenFor(x => x.Id)
+
+            <div class="form-group">
+                <label>Sensor name</label>
+                @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label>Device name</label>
+                @Html.DropDownListFor(x => x.SelectedDeviceId, new SelectList(Model.ListDevices, "DeviceID", "Name"), "-- Select Device --",
+                        new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SelectedDeviceId, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label>Min value</label>
+                @Html.TextBoxFor(x => x.MinValue, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <label>Max value</label>
+                @Html.TextBoxFor(x => x.MaxValue, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <label>Topic</label>
+                @Html.TextBoxFor(x => x.Topic, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Topic, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label>Location</label>
+                @Html.TextBoxFor(x => x.Location, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <label>Indication interval (hh:mm:ss)</label>
+                @Html.TextBoxFor(x => x.IndicationInterval, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IndicationInterval, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label>Unit</label>
+                @Html.DropDownListFor(x => x.SelectedUnitId, new SelectList(Model.ListUnits, "ID", "Name"), "-- Select Unit --",
+                    new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SelectedUnitId, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="pull-right">
+                <a href="~/Sensors" class="btn btn-info">Cancel</a>
+                <button type="submit" class="btn btn-success">Save</button>
+            </div>
+            }
+        </div>
+    </div>
+</div>

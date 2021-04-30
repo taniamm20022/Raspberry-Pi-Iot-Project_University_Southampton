@@ -1,0 +1,44 @@
+﻿@model LupenM.WebSite.Models.Users.UserLoginViewModel
+@{
+  Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="login-panel panel panel-default">
+
+                <div class="panel-heading">
+                    <h3 class="panel-title">Sign In</h3>
+                </div>
+
+                <div class="panel-body">
+                    @using (Html.BeginForm("Login", "Acounts", FormMethod.Post, new { role = "form" }))
+                    {
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger list-unstyled " })
+
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="login-email">E-mail</label>
+                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", id = "login-email" })
+                        </div>
+
+                        <div class="form-group">
+                            <label for="form-password">Password</label>
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", id = "form-password" })
+                            @Html.ValidationMessageFor(m => m.Password)
+                        </div>
+
+                        <div class="checkbox">
+                            <label><input name="remember" type="checkbox" value="Remember Me">Remember Me</label>
+                        </div>
+                        <!-- Change this to a button or input when using this as a form -->
+
+                        <input type="submit" value="Log in" class="btn btn-lg btn-success btn-block" />
+                    </fieldset>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

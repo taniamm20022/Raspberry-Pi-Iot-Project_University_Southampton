@@ -1,0 +1,13 @@
+﻿@model LupenM.WebSite.Models.MessageModel
+
+@if (Model != null)
+{
+<div id="container">
+    <div class='@(Model.IsSuccessfull ? "alert alert-success fade in" : "alert alert-danger")'>
+        <button class="close" data-dismiss="alert"> × </button>
+        <i class="fa-fw fa fa-check"></i>
+
+        @Model.Message
+    </div>
+</div>
+}

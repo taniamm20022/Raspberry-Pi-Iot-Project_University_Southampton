@@ -1,0 +1,86 @@
+﻿@model CSDI.WebAPIClient.TokenContainer
+
+<ul class="nav" id="side-menu">
+    @if (Model.UserRole != null && Model.UserRole.ToString() == "admins")
+    {
+    <li>
+        <a href="#">
+            <i class="fa fa-user fa-fw"></i> Users<span class="fa arrow"></span>
+        </a>
+        <ul class="nav nav-second-level collapse">
+            <li>
+                <a href="@Url.Action("GetUsers", "Acounts")">Users List</a>
+            </li>
+        </ul>
+        <!-- /.nav-second-level -->
+    </li>
+    <li>
+        <a href="#">
+            <i class="fa fa-newspaper-o" aria-hidden="true"></i> Nomenclatures<span class="fa arrow"></span>
+        </a>
+        <ul class="nav nav-second-level collapse">
+            <li>
+                <a href="@Url.Action("Index", "DeviceTypes")">Device Types List</a>
+            </li>
+            <li>
+                <a href="@Url.Action("CreateDeviceType", "DeviceTypes")">Register Device Type</a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Units")">Units List</a>
+            </li>
+            <li>
+                <a href="@Url.Action("CreateUnit", "Units")">Register Unit</a>
+            </li>
+        </ul>
+        <!-- /.nav-second-level -->
+    </li>
+    }
+    <li>
+        <a href="#">
+            <i class="fa fa-wrench fa-fw"></i> Devices<span class="fa arrow"></span>
+        </a>
+        <ul class="nav nav-second-level collapse">
+            <li>
+                <a href="@Url.Action("Index", "Device")">Devices List</a>
+            </li>
+            <li>
+                <a href="@Url.Action("CreateDevice", "Device")">Register Device</a>
+            </li>
+        </ul>
+        <!-- /.nav-second-level -->
+    </li>
+    <li>
+        <a href="#">
+            <i class="fa fa-sitemap fa-fw"></i> Sensors<span class="fa arrow"></span>
+        </a>
+        <ul class="nav nav-second-level collapse">
+            <li>
+                <a href="@Url.Action("Index", "Sensors")">Sensors List</a>
+            </li>
+            <li>
+                <a href="@Url.Action("CreateSensor", "Sensors")">Register Sensor</a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Diagnostics")">Sensors Status</a>
+            </li>
+        </ul>
+        <!-- /.nav-second-level -->
+    </li>
+    <li>
+        <a href="#">
+            <i class="fa fa-files-o fa-fw"></i> Reports<span class="fa arrow"></span>
+        </a>
+        <ul class="nav nav-second-level collapse">
+            <li>
+                <a href="@Url.Action("Indications", "Reports")">Signals</a>
+            </li>
+            <li>
+                <a href="@Url.Action("EmergencySituations", "Reports")">Emergency Situations</a>
+            </li>
+        </ul>
+        <!-- /.nav-second-level -->
+    </li>
+    <li class="hidden">
+        <a href="@Url.Action("Index", "About")"><i class="fa fa-dashboard fa-fw"></i>About</a>
+    </li>
+</ul>
